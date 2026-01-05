@@ -1,227 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Balamurali Krishna.M| Cybersecurity & Network Engineer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>BALA MURALI KRISHNA | CYBER_OPS_PORTFOLIO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00ffcc;
+            --primary-dim: rgba(0, 255, 204, 0.15);
+            --bg: #020617;
+            --text-dim: #94a3b8;
+            --text-bright: #e5e7eb;
+            --danger: #ff3e3e;
+        }
 
-<style>
-:root {
-  --bg: #020617;
-  --card: #020617;
-  --accent: #00ffcc;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-}
+        * { box-sizing: border-box; }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+        body {
+            background: var(--bg);
+            color: var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%);
+        }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: "Segoe UI", monospace;
-  line-height: 1.6;
-}
+        /* CRT Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
 
-/* NAVBAR */
-nav {
-  position: fixed;
-  width: 100%;
-  top: 0;
-  background: rgba(2,6,23,0.9);
-  padding: 15px;
-  text-align: center;
-  z-index: 1000;
-}
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
 
-nav a {
-  color: var(--accent);
-  margin: 0 15px;
-  text-decoration: none;
-  font-weight: bold;
-}
+        .terminal-window {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--primary-dim);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 255, 204, 0.05);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
 
-nav a:hover {
-  text-decoration: underline;
-}
+        .terminal-window.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-/* SECTIONS */
-section {
-  max-width: 1100px;
-  margin: auto;
-  padding: 90px 20px;
-}
+        /* Header UI */
+        .terminal-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--primary-dim);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
 
-h1, h2 {
-  color: var(--accent);
-  margin-bottom: 20px;
-}
+        .status-pulse {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 10px var(--primary);
+            animation: pulse 2s infinite;
+        }
 
-.card {
-  background: #020617;
-  border: 1px solid #0f172a;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  transition: transform 0.2s;
-}
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-.card:hover {
-  transform: translateY(-5px);
-  border-color: var(--accent);
-}
+        /* Glitch Title */
+        .glitch-wrapper {
+            margin-bottom: 40px;
+        }
 
-/* HERO */
-.hero {
-  text-align: center;
-  padding-top: 120px;
-}
+        #encrypted-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-shadow: 0 0 15px var(--primary-dim);
+            display: inline-block;
+        }
 
-.hero h1 {
-  font-size: 48px;
-}
+        .role-tag {
+            background: var(--primary-dim);
+            color: var(--primary);
+            padding: 4px 10px;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
 
-.hero p {
-  color: var(--muted);
-  font-size: 18px;
-}
+        /* Section Styling */
+        .section {
+            margin-bottom: 45px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.5s ease;
+        }
 
-.btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 20px;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  text-decoration: none;
-  border-radius: 6px;
-}
+        .section.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
 
-.btn:hover {
-  background: var(--accent);
-  color: #020617;
-}
+        .prompt { color: var(--text-dim); }
+        .cmd { 
+            color: var(--primary); 
+            font-weight: bold; 
+            margin-left: 10px;
+            text-transform: lowercase;
+        }
 
-/* SKILLS GRID */
-.skills {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
+        .output-content {
+            margin-top: 15px;
+            padding-left: 20px;
+            border-left: 1px solid var(--primary-dim);
+            color: var(--text-bright);
+        }
 
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 30px;
-  color: var(--muted);
-  border-top: 1px solid #0f172a;
-}
-</style>
+        /* Skill Bars */
+        .skill-container {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .skill-item { margin-bottom: 10px; }
+        .skill-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; color: var(--text-dim); }
+        .bar-bg { background: rgba(255,255,255,0.05); height: 4px; width: 100%; }
+        .bar-fill { 
+            background: var(--primary); 
+            height: 100%; 
+            width: 0; 
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 2s ease-out;
+        }
+
+        /* Project Cards */
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .project-card {
+            border: 1px solid var(--primary-dim);
+            padding: 15px;
+            border-radius: 4px;
+            background: rgba(0, 255, 204, 0.02);
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            background: var(--primary-dim);
+            transform: translateY(-5px);
+        }
+
+        /* Contact Link Styles */
+        .contact-link {
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        .contact-link:hover {
+            color: white;
+            text-shadow: 0 0 8px var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .skill-container, .project-grid { grid-template-columns: 1fr; }
+            #encrypted-name { font-size: 1.6rem; }
+        }
+
+    </style>
 </head>
-
 <body>
 
-<nav>
-  <a href="#about">About</a>
-  <a href="#skills">Skills</a>
-  <a href="#projects">Projects</a>
-  <a href="#experience">Experience</a>
-  <a href="#education">Education</a>
-</nav>
+<div class="container">
+    <div class="terminal-window" id="window">
+        <div class="terminal-top">
+            <div><span class="status-pulse"></span>SYSTEM_STATUS: SECURE</div>
+            <div>B_KRISHNA_OS v2.4.0</div>
+            <div>LOC: 12.9716° N, 77.5946° E</div>
+        </div>
 
-<!-- HERO -->
-<section class="hero">
-  <h1>About</h1>
-  <p>Balamurali Krishna M</p>
-  <p>Network Engineer | Cybersecurity Operations Enthusiast</p>
+        <div class="glitch-wrapper">
+            <span class="prompt">➜</span> <span class="cmd">fingerprint --user</span>
+            <div style="margin-top:20px;">
+                <span id="encrypted-name">LOADING...</span>
+                <div style="margin-top:10px;">
+                    <span class="role-tag">L1 SOC ANALYST</span>
+                    <span class="role-tag">NETWORK ENGINEER</span>
+                </div>
+            </div>
+        </div>
 
-  <a class="btn" href="BalamuraliKrishnaMResume.pdf.docx" download>Download Resume</a>
-</section>
+        <div class="section" id="sec-bio">
+            <span class="prompt">➜</span> <span class="cmd">cat about_me.txt</span>
+            <div class="output-content">
+                BCA Graduate & IBM Certified Cybersecurity Analyst. Currently specializing in 
+                Cybersecurity (MCA) at S-VYASA. Passionate about Blue Team operations, 
+                Network Security, and Incident Response.
+            </div>
+        </div>
 
-<!-- ABOUT -->
-<section id="about">
-  <h2>About Me</h2>
-  <div class="card">
-    <p>
-      BCA Graduate & IBM Certified Cybersecurity Analyst, currently pursuing MCA (Cybersecurity) to further strengthen my skills in network security, SOC operations, and system administration. Actively seeking entry-level SOC Analyst (L1) or NOC (L1) opportunities where I can apply hands-on knowledge and grow in a real-world security environment.
+        <div class="section" id="sec-skills">
+            <span class="prompt">➜</span> <span class="cmd">ls --skills /proficiency</span>
+            <div class="output-content">
+                <div class="skill-container">
+                    <div class="skill-item">
+                        <div class="skill-label"><span>SOC MONITORING</span><span>85%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" data-width="85%"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-label"><span>ROUTING & SWITCHING</span><span>90%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" data-width="90%"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-label"><span>THREAT HUNTING</span><span>75%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" data-width="75%"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-label"><span>WINDOWS SERVER/AD</span><span>80%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" data-width="80%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    </p>
-  </div>
-</section>
+        <div class="section" id="sec-projects">
+            <span class="prompt">➜</span> <span class="cmd">run ./view_projects.sh</span>
+            <div class="output-content">
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h4 style="margin:0 0 10px 0;">VLAN & Inter-VLAN Routing</h4>
+                        <p style="font-size:0.85rem; color:var(--text-dim);">Configured secure segmentation using Cisco Packet Tracer to isolate departments and optimize traffic.</p>
+                    </div>
+                    <div class="project-card">
+                        <h4 style="margin:0 0 10px 0;">SOC Incident Lab</h4>
+                        <p style="font-size:0.85rem; color:var(--text-dim);">Simulated brute-force attacks and malware logs using Splunk & ELK for triage and analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!-- SKILLS -->
-<section id="skills">
-  <h2>Technical Skills</h2>
-  <div class="skills">
-    <div class="card">
-      <h3>Cybersecurity</h3>
-      <p>Threat Hunting, SOC Monitoring, Intrusion Detection, SIEM (Splunk / ELK)</p>
+        <div class="section" id="sec-certs">
+            <span class="prompt">➜</span> <span class="cmd">verify --certificates</span>
+            <div class="output-content">
+                • IBM Cybersecurity Analyst Professional<br>
+                • CCNA Training Certificate (Alpha Tech)<br>
+                • Cisco Networking Academy Basics
+            </div>
+        </div>
+
+        <div class="section" id="sec-contact">
+            <span class="prompt">➜</span> <span class="cmd">connect --external</span>
+            <div class="output-content">
+                <a href="mailto:balamuralikrishna2004@gmail.com" class="contact-link"><i class="fas fa-envelope"></i> EMAIL</a>
+                <a href="https://linkedin.com/in/balamurali-krishna-m" target="_blank" class="contact-link"><i class="fab fa-linkedin"></i> LINKEDIN</a>
+                <a href="https://github.com/Balamuralikrishna2004" target="_blank" class="contact-link"><i class="fab fa-github"></i> GITHUB</a>
+                <div style="margin-top:15px; color:var(--text-dim); font-size:0.8rem;">
+                    [SYSTEM_LOG]: DISCONNECTING SESSION...
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card">
-      <h3>Networking</h3>
-      <p>Routing, Switching, VLANs, ACLs, DNS, DHCP, VPN</p>
-    </div>
-    <div class="card">
-      <h3>System Administration</h3>
-      <p>Windows Server, Active Directory, IT Support</p>
-    </div>
-    <div class="card">
-      <h3>Tools & Programming</h3>
-      <p>Wireshark, MySQL, Python, HTML, CSS</p>
-    </div>
-  </div>
-</section>
+</div>
 
-<!-- PROJECTS -->
-<section id="projects">
-  <h2>Projects</h2>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const windowEl = document.getElementById('window');
+        const sections = document.querySelectorAll('.section');
+        const bars = document.querySelectorAll('.bar-fill');
+        
+        // 1. Initial window fade in
+        setTimeout(() => {
+            windowEl.classList.add('active');
+            decodeText("Bala Murali Krishna M");
+        }, 300);
 
-  <div class="card">
-    <h3>VLAN & Inter-VLAN Routing</h3>
-    <p>Configured VLAN segmentation and inter-VLAN routing using Cisco Packet Tracer
-       to improve security and isolate departments.</p>
-  </div>
+        // 2. Sequential section loading
+        sections.forEach((sec, index) => {
+            setTimeout(() => {
+                sec.classList.add('visible');
+                // Trigger bars if the section is the skills section
+                if(sec.id === 'sec-skills') {
+                    bars.forEach(bar => bar.style.width = bar.getAttribute('data-width'));
+                }
+            }, 1200 + (index * 600));
+        });
 
-  <div class="card">
-    <h3>SOC Incident Analysis Lab</h3>
-    <p>Simulated L1 SOC monitoring, analyzed brute-force and malware attacks using SIEM,
-       and performed incident triage and mitigation.</p>
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section id="experience">
-  <h2>Experience</h2>
-
-  <div class="card">
-    <h3>Field Support Engineer (Part-Time)</h3>
-    <p>Quess Corp Ltd | 2023 – 2025</p>
-    <p>First-line troubleshooting, hardware/software support, and client communication.</p>
-  </div>
-
-  <div class="card">
-    <h3>IT Intern</h3>
-    <p>Novozymes South Asia Pvt Ltd | 2025</p>
-    <p>Windows OS setup, Outlook, printer configuration, and IT asset documentation.</p>
-  </div>
-</section>
-
-<!-- EDUCATION -->
-<section id="education">
-  <h2>Education</h2>
-
-  <div class="card">
-    <p><b>MCA (Cybersecurity)</b> – S-VYASA University (2025–2027)</p>
-    <p><b>BCA</b> – Bangalore University | GPA 8.37 / 10</p>
-  </div>
-</section>
-
-<footer>
-  © 2026 Bala Murali Krishna | Built with GitHub Pages
-</footer>
+        // 3. Decoding effect function
+        function decodeText(finalText) {
+            const chars = "!@#$%^&*()_+NKJNKLMLK><?";
+            const el = document.getElementById("encrypted-name");
+            let iteration = 0;
+            
+            const interval = setInterval(() => {
+                el.innerText = finalText.split("")
+                    .map((char, index) => {
+                        if(index < iteration) return char;
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    })
+                    .join("");
+                
+                if(iteration >= finalText.length) clearInterval(interval);
+                iteration += 1/3;
+            }, 50);
+        }
+    });
+</script>
 
 </body>
 </html>
