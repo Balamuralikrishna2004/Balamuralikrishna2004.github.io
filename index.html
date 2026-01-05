@@ -1,20 +1,228 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>balamuralikrishna</title>
+<meta charset="UTF-8">
+<title>Bala Murali Krishna | Cybersecurity & Network Engineer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #020617;
+  --card: #020617;
+  --accent: #00ffcc;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", monospace;
+  line-height: 1.6;
+}
+
+/* NAVBAR */
+nav {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background: rgba(2,6,23,0.9);
+  padding: 15px;
+  text-align: center;
+  z-index: 1000;
+}
+
+nav a {
+  color: var(--accent);
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* SECTIONS */
+section {
+  max-width: 1100px;
+  margin: auto;
+  padding: 90px 20px;
+}
+
+h1, h2 {
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #020617;
+  border: 1px solid #0f172a;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding-top: 120px;
+}
+
+.hero h1 {
+  font-size: 48px;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 20px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.btn:hover {
+  background: var(--accent);
+  color: #020617;
+}
+
+/* SKILLS GRID */
+.skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 30px;
+  color: var(--muted);
+  border-top: 1px solid #0f172a;
+}
+</style>
 </head>
-<body style="background:black;color:lime;font-family:monospace;text-align:center;padding-top:80px;">
 
-<h1>ABOUT</h1>
-<p>Name: Balamurali Krishna</p>
-<p>Role: Cybersecurity Student</p>
-<p>Skills: Networking | SOC | Linux</p>
+<body>
 
-<p>
-<a href="https://github.com/Balamuralikrishna2004" style="color:lime;">GitHub</a> |
-<a href="https://linkedin.com/in/balamurali-krishna-m-377579267/" style="color:lime;">LinkedIn</a>
-</p>
+<nav>
+  <a href="#about">whoami</a>
+  <a href="#skills">Skills</a>
+  <a href="#projects">Projects</a>
+  <a href="#experience">Experience</a>
+  <a href="#education">Education</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>whoami</h1>
+  <p>Bala Murali Krishna M</p>
+  <p>Network Engineer | Cybersecurity Operations Enthusiast</p>
+
+  <a class="btn" href="BalamuraliKrishnaMResume.pdf.docx" download>Download Resume</a>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2>About Me</h2>
+  <div class="card">
+    <p>
+      BCA Graduate & IBM Certified Cybersecurity Analyst with strong foundations
+      in Networking, Windows Administration, and Security Operations.
+      Actively seeking entry-level SOC Analyst (L1) or NOC (L1) roles.
+    </p>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <h2>Technical Skills</h2>
+  <div class="skills">
+    <div class="card">
+      <h3>Cybersecurity</h3>
+      <p>Threat Hunting, SOC Monitoring, Intrusion Detection, SIEM (Splunk / ELK)</p>
+    </div>
+    <div class="card">
+      <h3>Networking</h3>
+      <p>Routing, Switching, VLANs, ACLs, DNS, DHCP, VPN</p>
+    </div>
+    <div class="card">
+      <h3>System Administration</h3>
+      <p>Windows Server, Active Directory, IT Support</p>
+    </div>
+    <div class="card">
+      <h3>Tools & Programming</h3>
+      <p>Wireshark, MySQL, Python, HTML, CSS</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <h2>Projects</h2>
+
+  <div class="card">
+    <h3>VLAN & Inter-VLAN Routing</h3>
+    <p>Configured VLAN segmentation and inter-VLAN routing using Cisco Packet Tracer
+       to improve security and isolate departments.</p>
+  </div>
+
+  <div class="card">
+    <h3>SOC Incident Analysis Lab</h3>
+    <p>Simulated L1 SOC monitoring, analyzed brute-force and malware attacks using SIEM,
+       and performed incident triage and mitigation.</p>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <h2>Experience</h2>
+
+  <div class="card">
+    <h3>Field Support Engineer (Part-Time)</h3>
+    <p>Quess Corp Ltd | 2023 – 2025</p>
+    <p>First-line troubleshooting, hardware/software support, and client communication.</p>
+  </div>
+
+  <div class="card">
+    <h3>IT Intern</h3>
+    <p>Novozymes South Asia Pvt Ltd | 2025</p>
+    <p>Windows OS setup, Outlook, printer configuration, and IT asset documentation.</p>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <h2>Education</h2>
+
+  <div class="card">
+    <p><b>MCA (Cybersecurity)</b> – S-VYASA University (2025–2027)</p>
+    <p><b>BCA</b> – Bangalore University | GPA 8.37 / 10</p>
+  </div>
+</section>
+
+<footer>
+  © 2026 Bala Murali Krishna | Built with GitHub Pages
+</footer>
 
 </body>
 </html>
-
