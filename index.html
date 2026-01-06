@@ -8,14 +8,13 @@
 
 <style>
 :root {
-    /* Reduced Green - Moved to a sophisticated Slate & Mint palette */
-    --primary: #4ade80; 
-    --accent: #38bdf8;
-    --bg: #020617;
+    --primary: #00f2ff; /* Electric Cyan */
+    --accent: #7000ff;  /* Neon Purple */
+    --bg: #050508;
+    --text: #e2e8f0;
     --text-dim: #94a3b8;
-    --text-bright: #f8fafc;
-    --card-bg: rgba(15, 23, 42, 0.9);
-    --border: rgba(148, 163, 184, 0.1);
+    --glass: rgba(15, 23, 42, 0.6);
+    --border: rgba(255, 255, 255, 0.08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,203 +23,218 @@
 
 body {
     background: var(--bg);
-    color: var(--text-bright);
-    font-family: 'Courier New', monospace;
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     overflow-x: hidden;
     line-height: 1.6;
 }
 
-/* --- SYSTEM OVERLAYS --- */
-#bg-canvas { position: fixed; inset: 0; z-index: -3; opacity: 0.15; } /* Subdued Binary */
-
-body::after {
-    content: ""; position: fixed; inset: 0; pointer-events: none;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
-    background-size: 100% 4px; z-index: 100;
+/* --- THE AMBIENT BACKGROUND --- */
+#bg-canvas { position: fixed; inset: 0; z-index: -3; }
+.vignette {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(5, 5, 8, 0.8) 100%);
+    pointer-events: none; z-index: -2;
 }
 
-/* --- SIGNATURE CURSOR --- */
+/* --- THE SIGNATURE CURSOR --- */
 #cursor-dot {
-    position: fixed; width: 4px; height: 4px; background: var(--primary);
+    position: fixed; width: 6px; height: 6px; background: #fff;
     border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%);
 }
 #cursor-ring {
-    position: fixed; width: 30px; height: 30px; border: 1px solid var(--primary);
+    position: fixed; width: 35px; height: 35px; border: 1.5px solid var(--primary);
     border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s, border-color 0.3s;
+    transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), height 0.3s, border-color 0.3s;
 }
 
-/* --- TERMINAL INTERFACE --- */
-.container { max-width: 850px; margin: 40px auto; padding: 0 20px; }
+/* --- MAIN INTERFACE --- */
+.container { max-width: 900px; margin: 60px auto; padding: 0 25px; }
 
-.terminal {
-    background: var(--card-bg);
+.glass-panel {
+    background: var(--glass);
     border: 1px solid var(--border);
-    border-radius: 8px; padding: 40px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    opacity: 0; transform: translateY(20px);
-    transition: 1s ease-out;
+    border-radius: 24px; padding: 50px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    opacity: 0; transform: translateY(40px);
+    transition: 1.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.terminal.active { opacity: 1; transform: translateY(0); }
+.glass-panel.active { opacity: 1; transform: translateY(0); }
 
-.top-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 15px; margin-bottom: 40px;
-    font-size: 0.7rem; color: var(--text-dim); letter-spacing: 2px;
-}
+/* --- TYPOGRAPHY & ALIGNMENT --- */
+.section { margin-bottom: 60px; opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
+.section.visible { opacity: 1; transform: translateY(0); }
 
-/* --- CONTENT ALIGNMENT --- */
-.section { margin-bottom: 60px; opacity: 0; transform: translateX(-10px); transition: 0.6s ease-out; }
-.section.visible { opacity: 1; transform: translateX(0); }
-
-.label { color: var(--primary); font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; display: block; }
-
-#name { 
-    font-size: clamp(1.5rem, 5vw, 2.5rem); 
-    color: #fff; margin-bottom: 15px; font-weight: 800;
+.kicker {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem; color: var(--primary);
+    text-transform: uppercase; letter-spacing: 4px;
+    margin-bottom: 10px; display: block;
 }
 
-.tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
-.tag { 
-    font-size: 0.7rem; padding: 4px 12px; border: 1px solid var(--primary); 
-    color: var(--primary); border-radius: 2px; background: rgba(74, 222, 128, 0.05);
+#name-resolve {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 800; color: #fff; letter-spacing: -2px;
+    margin-bottom: 15px;
 }
 
-.description { color: var(--text-dim); font-size: 0.95rem; max-width: 600px; }
-
-/* --- DATA CARDS (Aligned One-by-One) --- */
-.entry {
-    border-left: 2px solid var(--border);
-    padding-left: 20px; margin-bottom: 30px;
-    transition: 0.3s;
+.sub-roles {
+    display: flex; gap: 15px; margin-bottom: 30px;
+    font-family: 'Courier New', monospace; font-size: 0.85rem;
 }
-.entry:hover { border-left-color: var(--primary); }
-.entry h3 { font-size: 1.1rem; color: #fff; margin-bottom: 5px; }
-.entry span { font-size: 0.8rem; color: var(--accent); display: block; margin-bottom: 10px; }
-.entry ul { list-style: none; color: var(--text-dim); font-size: 0.9rem; }
-.entry li::before { content: "» "; color: var(--primary); }
+.role { color: var(--accent); font-weight: bold; }
 
-.footer-links { display: flex; gap: 30px; margin-top: 20px; }
-.footer-links a { color: var(--primary); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
-.footer-links a:hover { color: #fff; text-shadow: 0 0 10px var(--primary); }
+.bio { color: var(--text-dim); font-size: 1.05rem; max-width: 650px; margin-bottom: 40px; }
 
+/* --- EXPERTISE CARDS (ONE BY ONE) --- */
+.entry-group { border-top: 1px solid var(--border); padding-top: 30px; }
+
+.data-row {
+    display: flex; flex-direction: column; gap: 8px; margin-bottom: 35px;
+    position: relative; padding-left: 20px;
+}
+.data-row::before {
+    content: ""; position: absolute; left: 0; top: 0; width: 2px; height: 100%;
+    background: linear-gradient(to bottom, var(--primary), transparent);
+}
+
+.data-row h3 { font-size: 1.2rem; color: #fff; }
+.data-row .meta { font-size: 0.85rem; color: var(--accent); font-weight: 600; text-transform: uppercase; }
+.data-row p { font-size: 0.95rem; color: var(--text-dim); }
+
+.skill-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.pill {
+    font-size: 0.7rem; padding: 4px 12px; border-radius: 100px;
+    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
+    color: var(--text); transition: 0.3s;
+}
+.pill:hover { border-color: var(--primary); background: rgba(0, 242, 255, 0.05); }
+
+.contact-bar {
+    display: flex; gap: 40px; margin-top: 50px;
+    border-top: 1px solid var(--border); padding-top: 30px;
+}
+.contact-bar a {
+    color: var(--text); text-decoration: none; font-size: 1.2rem;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.contact-bar a:hover { color: var(--primary); transform: translateY(-5px) scale(1.1); }
+
+@media (max-width: 600px) {
+    .glass-panel { padding: 30px 20px; border-radius: 0; border: none; background: transparent; backdrop-filter: none; }
+    .container { margin: 20px auto; }
+}
 </style>
 </head>
 
 <body>
 
 <canvas id="bg-canvas"></canvas>
+<div class="vignette"></div>
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 
 <div class="container">
-    <div class="terminal" id="main-ui">
+    <div class="glass-panel" id="panel">
         
-        <div class="top-bar">
-            <div><i class="fas fa-shield-virus"></i> SECURITY_STANCE: ACTIVE</div>
-            <div id="clock">00:00:00</div>
-        </div>
-
-        <div class="section">
-            <span class="label">01. USER_IDENTIFICATION</span>
-            <h1 id="name" data-value="BALA MURALI KRISHNA M">BALA MURALI KRISHNA M</h1>
-            <div class="tags">
-                <span class="tag">SOC ANALYST</span>
-                <span class="tag">NETWORK ENGINEER</span>
-                <span class="tag">CLOUD SECURITY</span>
+        <header class="section">
+            <span class="kicker">Security Operations Analyst</span>
+            <h1 id="name-resolve" data-value="BALA MURALI KRISHNA M">BALA MURALI KRISHNA M</h1>
+            <div class="sub-roles">
+                <span class="role">// NET_ENG</span>
+                <span class="role">// CYBER_DEFENSE</span>
+                <span class="role">// CLOUD_OPS</span>
             </div>
-            <p class="description">
-                BCA Graduate & IBM Certified Cybersecurity Analyst.<br>
-                Currently pursuing MCA (Cybersecurity) at S-VYASA University.<br>
-                Based in Bengaluru, Karnataka.
+            <p class="bio">
+                Specializing in infrastructure integrity and incident triage. Currently architecting my expertise through an MCA in Cybersecurity at S-VYASA University.
             </p>
-        </div>
+        </header>
 
         <div class="section">
-            <span class="label">02. WORK_HISTORY</span>
-            <div class="entry">
-                <h3>Field Support Engineer</h3>
-                <span>Quess Corp Ltd | 2023 — 2025</span>
-                <ul>
-                    <li>L1/L2 Technical support & endpoint security</li>
-                    <li>Network infrastructure troubleshooting</li>
-                    <li>SLA compliance and technical documentation</li>
-                </ul>
-            </div>
-            <div class="entry">
-                <h3>IT Intern</h3>
-                <span>Novozymes South Asia | 2025</span>
-                <ul>
-                    <li>Enterprise OS deployment and configuration</li>
-                    <li>Secure IT asset management</li>
-                </ul>
+            <span class="kicker">Professional History</span>
+            <div class="entry-group">
+                <div class="data-row">
+                    <h3>Field Support Engineer</h3>
+                    <div class="meta">Quess Corp Ltd | 2023 — 2025</div>
+                    <p>Orchestrated L1/L2 infrastructure support and resolved complex network anomalies under strict SLA protocols.</p>
+                </div>
+                <div class="data-row">
+                    <h3>IT Systems Intern</h3>
+                    <div class="meta">Novozymes South Asia | 2025</div>
+                    <p>Managed secure OS deployment and enterprise asset configuration within a high-compliance environment.</p>
+                </div>
             </div>
         </div>
 
         <div class="section">
-            <span class="label">03. CREDENTIALS</span>
-            <div class="entry">
-                <h3>IBM Cybersecurity Analyst</h3>
-                <span>Professional Certificate — Coursera</span>
-            </div>
-            <div class="entry">
-                <h3>CCNA & MCSA Training</h3>
-                <span>Alpha Tech Academy</span>
-            </div>
-            <div class="entry">
-                <h3>Cisco Networking Academy</h3>
-                <span>Foundations & Initial Configuration</span>
-            </div>
-        </div>
-
-        <div class="section">
-            <span class="label">04. LAB_OPERATIONS</span>
-            <div class="entry">
-                <h3>VLAN & Inter-VLAN Routing</h3>
-                <p class="description">Secure network segmentation and traffic control using Cisco Packet Tracer.</p>
-            </div>
-            <div class="entry">
-                <h3>SIEM Incident Analysis</h3>
-                <p class="description">Log analysis and threat detection using Splunk & ELK Stack simulation.</p>
+            <span class="kicker">Tactical Stack</span>
+            <div class="entry-group">
+                <div class="data-row">
+                    <h3>Defensive Capabilities</h3>
+                    <div class="skill-pills">
+                        <span class="pill">Splunk SIEM</span>
+                        <span class="pill">Wireshark</span>
+                        <span class="pill">Nmap</span>
+                        <span class="pill">IBM Cyber Analyst</span>
+                        <span class="pill">Log Triage</span>
+                    </div>
+                </div>
+                <div class="data-row">
+                    <h3>Networking & Systems</h3>
+                    <div class="skill-pills">
+                        <span class="pill">VLAN Routing</span>
+                        <span class="pill">TCP/IP</span>
+                        <span class="pill">CCNA</span>
+                        <span class="pill">MCSA</span>
+                        <span class="pill">Active Directory</span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="section">
-            <span class="label">05. SECURE_COMMUNICATION</span>
-            <div class="footer-links">
-                <a href="mailto:balamuralikrishna2004@gmail.com"><i class="fas fa-envelope"></i> EMAIL</a>
-                <a href="https://www.linkedin.com/in/balamurali-krishna-m-377579267/" target="_blank"><i class="fab fa-linkedin"></i> LINKEDIN</a>
-                <a href="https://github.com/Balamuralikrishna2004" target="_blank"><i class="fab fa-github"></i> GITHUB</a>
+            <span class="kicker">Operation Logs</span>
+            <div class="entry-group">
+                <div class="data-row">
+                    <h3>VLAN Segmentation Architecture</h3>
+                    <p>Engineered a segmented network topology using Cisco Packet Tracer to mitigate unauthorized lateral movement.</p>
+                </div>
+                <div class="data-row">
+                    <h3>SOC Incident Analysis Lab</h3>
+                    <p>Developed a simulation environment for real-time log ingestion and threat actor pattern recognition.</p>
+                </div>
             </div>
         </div>
+
+        <footer class="section">
+            <div class="contact-bar">
+                <a href="mailto:balamuralikrishna2004@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://linkedin.com/in/balamurali-krishna-m-377579267" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/Balamuralikrishna2004" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </footer>
 
     </div>
 </div>
 
 <script>
-// --- CORE FUNCTIONALITY ---
-const ui = document.getElementById('main-ui');
+const panel = document.getElementById('panel');
 const sections = document.querySelectorAll('.section');
 
 window.addEventListener('load', () => {
-    ui.classList.add('active');
+    panel.classList.add('active');
     sections.forEach((s, i) => {
-        setTimeout(() => s.classList.add('visible'), 500 + (i * 200));
+        setTimeout(() => s.classList.add('visible'), 600 + (i * 200));
     });
-    scrambleText();
+    resolveName();
 });
 
-// --- CLOCK ---
-setInterval(() => {
-    document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-GB');
-}, 1000);
-
-// --- DECRYPTION ANIMATION ---
-function scrambleText() {
-    const el = document.getElementById('name');
+// --- DECRYPTION EFFECT ---
+function resolveName() {
+    const el = document.getElementById('name-resolve');
     const original = el.dataset.value;
-    const chars = "01#%&?";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
     let iteration = 0;
     
     const interval = setInterval(() => {
@@ -234,7 +248,7 @@ function scrambleText() {
     }, 40);
 }
 
-// --- CURSOR LOGIC ---
+// --- SMOOTH CURSOR ---
 const dot = document.getElementById("cursor-dot");
 const ring = document.getElementById("cursor-ring");
 let mx = 0, my = 0, rx = 0, ry = 0;
@@ -245,35 +259,50 @@ document.addEventListener("mousemove", e => {
 });
 
 function animateCursor() {
-    rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
     ring.style.left = rx + "px"; ring.style.top = ry + "px";
     requestAnimationFrame(animateCursor);
 }
 animateCursor();
 
-// --- SUBTLE BINARY RAIN ---
+// --- NEURAL NETWORK BACKGROUND ---
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
-let w, h, cols, drops;
+let points = [];
 
 function init() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-    cols = Math.floor(w / 20);
-    drops = Array(cols).fill(1);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    points = [];
+    for(let i=0; i<60; i++) {
+        points.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5
+        });
+    }
 }
 
 function draw() {
-    ctx.fillStyle = "rgba(2, 6, 23, 0.1)";
-    ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "rgba(74, 222, 128, 0.2)";
-    ctx.font = "14px monospace";
-    for(let i=0; i<drops.length; i++) {
-        const text = Math.random() > 0.5 ? "0" : "1";
-        ctx.fillText(text, i * 20, drops[i] * 20);
-        if(drops[i] * 20 > h && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-    }
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    points.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        
+        ctx.fillStyle = "rgba(0, 242, 255, 0.2)";
+        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+
+        points.forEach(p2 => {
+            let d = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if(d < 150) {
+                ctx.strokeStyle = `rgba(112, 0, 255, ${0.1 - d/1500})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+            }
+        });
+    });
     requestAnimationFrame(draw);
 }
 
