@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>BALAMURALI KRISHNA M | CYBER PORTFOLIO</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
@@ -14,10 +14,15 @@
     --bg: #0d001a;
     --text-dim: #a78bfa;
     --text: #f0f0ff;
-    --card-bg: rgba(20,10,40,0.7);
+    --card-bg: rgba(20,10,40,0.8);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Hide cursor on desktop, but allow interaction on mobile */
+@media (pointer: fine) {
+    * { cursor: none !important; }
+}
 
 body {
     background: var(--bg);
@@ -25,90 +30,94 @@ body {
     font-family: 'Courier New', Consolas, monospace;
     line-height: 1.6;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* --- SMOOTH BACKGROUND --- */
-#bg-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.35; }
+/* --- ADAPTIVE BACKGROUND --- */
+#bg-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.35; pointer-events: none; }
 #mouse-glow {
-    position: fixed; width: 600px; height: 600px;
+    position: fixed; width: 400px; height: 400px;
     background: radial-gradient(circle, rgba(195,0,255,0.1) 0%, rgba(0,240,255,0.05) 40%, transparent 70%);
-    filter: blur(80px); pointer-events: none; z-index: -1; transform: translate(-50%, -50%);
+    filter: blur(60px); pointer-events: none; z-index: -1; transform: translate(-50%, -50%);
+    display: none; /* Only show on desktop mousemove */
 }
 
-/* --- TARGETING CURSOR --- */
-#cursor-dot {
-    position: fixed; width: 4px; height: 4px; background: var(--primary);
-    border-radius: 50%; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%);
+/* --- CURSOR (Hidden on Mobile) --- */
+#cursor-dot, #cursor-ring {
+    position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%);
+    display: none;
 }
-#cursor-ring {
-    position: fixed; width: 30px; height: 30px; border: 1.5px solid var(--primary);
-    border-radius: 50%; z-index: 9999; pointer-events: none; transform: translate(-50%, -50%);
-    transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                background 0.3s, border-color 0.3s;
-}
-.cursor-hover #cursor-ring {
-    width: 55px; height: 55px; border-color: var(--accent); background: rgba(195,0,255,0.08);
+@media (pointer: fine) {
+    #cursor-dot { display: block; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; }
+    #cursor-ring { 
+        display: block; width: 30px; height: 30px; border: 1.5px solid var(--primary); border-radius: 50%;
+        transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s;
+    }
+    .cursor-hover #cursor-ring { width: 50px; height: 50px; border-color: var(--accent); background: rgba(195,0,255,0.05); }
 }
 
-/* --- TERMINAL UI --- */
-.container { max-width: 1100px; margin: auto; padding: 3rem 1.5rem; }
+/* --- RESPONSIVE TERMINAL --- */
+.container { width: 100%; max-width: 1100px; margin: auto; padding: 1.5rem; }
+
 .terminal-window {
     background: var(--card-bg);
     border: 1px solid var(--primary-dim);
-    border-radius: 12px; padding: 3rem;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.2, 1, 0.3, 1);
+    border-radius: 12px; padding: 2rem;
+    backdrop-filter: blur(15px);
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 1, 0.3, 1);
 }
 .terminal-window.active { opacity: 1; transform: translateY(0); }
 
+@media (max-width: 600px) {
+    .container { padding: 0.8rem; }
+    .terminal-window { padding: 1.2rem; border-radius: 8px; }
+}
+
 .terminal-top {
     display: flex; justify-content: space-between; border-bottom: 1px solid var(--primary-dim);
-    padding-bottom: 1rem; margin-bottom: 3rem; color: var(--text-dim); font-size: 0.85rem; letter-spacing: 1px;
+    padding-bottom: 0.8rem; margin-bottom: 2rem; color: var(--text-dim); font-size: 0.75rem;
 }
 
 #scramble-name {
-    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-size: clamp(1.8rem, 8vw, 4.5rem);
     font-weight: 900; color: var(--primary);
-    margin: 1rem 0; text-transform: uppercase;
-    min-height: 1.2em;
+    margin: 1rem 0; word-break: break-word;
 }
 
 .role-tag {
-    display: inline-block; padding: 0.4rem 1rem; margin-right: 10px;
+    display: inline-block; padding: 0.3rem 0.8rem; margin: 4px 6px 4px 0;
     border: 1px solid var(--accent); color: var(--accent); border-radius: 4px;
-    font-size: 0.85rem; transition: 0.3s;
+    font-size: 0.8rem;
 }
-.role-tag:hover { background: var(--accent); color: white; }
 
-.section { margin-bottom: 5rem; opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
+.section { margin-bottom: 3.5rem; opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
 .section.visible { opacity: 1; transform: translateY(0); }
 
 .section-title {
-    color: var(--primary); font-size: 1.2rem; margin-bottom: 1.5rem;
+    color: var(--primary); font-size: 1.1rem; margin-bottom: 1.2rem;
     display: flex; align-items: center; gap: 10px;
 }
 
-.grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+.grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
 
 .data-card {
     background: rgba(255,255,255,0.03); border: 1px solid var(--primary-dim);
-    padding: 1.8rem; border-radius: 8px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 1.5rem; border-radius: 8px;
 }
-.data-card:hover {
-    border-color: var(--primary); transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,240,255,0.1);
-}
-.data-card strong { color: var(--primary); display: block; margin-bottom: 0.5rem; }
+.data-card strong { color: var(--primary); display: block; margin-bottom: 0.4rem; font-size: 1.1rem; }
+.data-card p, .data-card li { font-size: 0.9rem; color: var(--text-dim); }
 .data-card ul { list-style: none; margin-top: 10px; }
-.data-card li { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 5px; }
 .data-card li::before { content: "> "; color: var(--accent); }
 
-.footer-icons { display: flex; justify-content: center; gap: 3rem; margin-top: 2rem; }
-.footer-icons a { color: var(--primary); font-size: 2rem; transition: 0.4s; }
-.footer-icons a:hover { color: var(--accent); transform: translateY(-5px); }
+.footer-icons { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
+.footer-icons a { color: var(--primary); font-size: 1.8rem; transition: 0.3s; }
+
+/* Desktop-only Hover */
+@media (hover: hover) {
+    .data-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+    .footer-icons a:hover { color: var(--accent); transform: scale(1.2); }
+}
 </style>
 </head>
 
@@ -122,85 +131,68 @@ body {
 <div class="container">
     <div class="terminal-window" id="window">
         <div class="terminal-top">
-            <div><i class="fas fa-shield-halved"></i> SECURE_CONNECTION_ESTABLISHED</div>
+            <div><i class="fas fa-code-branch"></i> PORTFOLIO_v2.0</div>
             <div id="clock">00:00:00</div>
         </div>
 
         <div class="section">
-            <h1 id="scramble-name" data-value="Balamurali Krishna M">########## ####### #</h1>
+            <h1 id="scramble-name" data-value="Balamurali Krishna M">BALAMURALI</h1>
             <div class="roles">
-                <span class="role-tag">SOC Operations</span>
-                <span class="role-tag">Network Defense</span>
-                <span class="role-tag">L1/L2 Support</span>
+                <span class="role-tag">SOC Analyst</span>
+                <span class="role-tag">Network Security</span>
             </div>
-            <p style="margin-top: 2rem; color: var(--text-dim); max-width: 800px;">
-                Specializing in infrastructure security and incident triage. Currently pursuing MCA in Cybersecurity 
-                at S-VYASA University. Expert in managing technical support life cycles and network integrity.
+            <p style="margin-top: 1.5rem; color: var(--text-dim); font-size: 0.95rem;">
+                Bengaluru-based Cybersecurity professional specializing in threat analysis and system defense. 
+                MCA (Cybersecurity) Candidate.
             </p>
         </div>
 
         <div class="section">
-            <div class="section-title"><i class="fas fa-graduation-cap"></i> EDUCATION_HISTORY</div>
+            <div class="section-title"><i class="fas fa-briefcase"></i> EXPERIENCE</div>
             <div class="grid-layout">
                 <div class="data-card">
-                    <strong>MCA – Cybersecurity</strong>
-                    <small>S-VYASA University | 2025 – 2027</small>
-                    <ul>
-                        <li>Digital Forensics & Triage</li>
-                        <li>Advanced Network Defense</li>
-                        <li>Ethical Hacking & VAPT</li>
-                    </ul>
+                    <strong>Field Support Engineer</strong>
+                    <small>Quess Corp Ltd | 2023 - 2025</small>
+                    <p style="margin-top:8px;">L1/L2 Infrastructure support and technical troubleshooting.</p>
                 </div>
                 <div class="data-card">
-                    <strong>BCA – Computer Applications</strong>
-                    <small>Bangalore University | 2022 – 2025</small>
-                    <ul>
-                        <li>Core Networking & OS</li>
-                        <li>Software Development Lifecycle</li>
-                    </ul>
+                    <strong>IT Intern</strong>
+                    <small>Novozymes South Asia | 2025</small>
+                    <p style="margin-top:8px;">Windows OS deployment and asset management.</p>
                 </div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-title"><i class="fas fa-project-diagram"></i> OPERATIONAL_PROJECTS</div>
+            <div class="section-title"><i class="fas fa-certificate"></i> CERTIFICATIONS</div>
             <div class="grid-layout">
                 <div class="data-card">
-                    <strong>VLAN & Inter-VLAN Routing Lab</strong>
-                    <p>Designed a secure segmented network in Cisco Packet Tracer. Applied ACLs to mitigate unauthorized inter-departmental traffic.</p>
+                    <strong>IBM Cyber Analyst</strong>
+                    <p>Professional Certificate in Incident Response & SIEM.</p>
                 </div>
                 <div class="data-card">
-                    <strong>SOC Incident Simulation</strong>
-                    <p>Utilized Splunk for log ingestion and alert generation. Performed root cause analysis on simulated brute-force and malware events.</p>
+                    <strong>Cisco CCNA</strong>
+                    <p>Network fundamentals, Routing, and Switching.</p>
                 </div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-title"><i class="fas fa-certificate"></i> CREDENTIALS_&_STACK</div>
+            <div class="section-title"><i class="fas fa-project-diagram"></i> PROJECTS</div>
             <div class="grid-layout">
                 <div class="data-card">
-                    <strong>Certifications</strong>
-                    <ul>
-                        <li>IBM Cybersecurity Analyst (Professional)</li>
-                        <li>CCNA Training (Alpha Tech Academy)</li>
-                        <li>MCSA (Windows Server Admin)</li>
-                        <li>Cisco Networking Basics</li>
-                    </ul>
+                    <strong>VLAN Routing Lab</strong>
+                    <p>Secure network segmentation using Cisco Packet Tracer and ACLs.</p>
                 </div>
                 <div class="data-card">
-                    <strong>Technical Stack</strong>
-                    <ul>
-                        <li>Security: SIEM (Splunk/ELK), Wireshark, Nmap</li>
-                        <li>Network: TCP/IP, Subnetting, VLAN Routing</li>
-                        <li>Systems: Windows/Linux Admin, Active Directory</li>
-                    </ul>
+                    <strong>SIEM Triage</strong>
+                    <p>Simulated SOC workflow using Splunk for log analysis and alerting.</p>
                 </div>
             </div>
         </div>
 
         <div class="footer-icons">
-            <a href="https://www.linkedin.com/in/balamurali-krishna-m-377579267/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://linkedin.com/in/balamurali-krishna-m-377579267" target="_blank"><i class="fab fa-linkedin"></i></a>
             <a href="https://github.com/Balamuralikrishna2004" target="_blank"><i class="fab fa-github"></i></a>
             <a href="mailto:your.email@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
@@ -209,65 +201,61 @@ body {
 
 <script>
 // --- CLOCK ---
-setInterval(()=>clock.innerText=new Date().toLocaleTimeString('en-GB'), 1000);
+setInterval(() => {
+    document.getElementById("clock").innerText = new Date().toLocaleTimeString('en-GB');
+}, 1000);
 
-// --- DECRYPTION EFFECT ---
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&$@0123456789";
+// --- SCRAMBLE EFFECT ---
 const nameElement = document.getElementById("scramble-name");
-
 function scramble() {
+    const letters = "ABCDEFGH#%&$@0123456789";
     let iteration = 0;
     const interval = setInterval(() => {
-        nameElement.innerText = nameElement.innerText
-            .split("")
-            .map((letter, index) => {
-                if(index < iteration) return nameElement.dataset.value[index];
-                return letters[Math.floor(Math.random() * 41)]
-            })
+        nameElement.innerText = nameElement.dataset.value.split("")
+            .map((l, i) => i < iteration ? nameElement.dataset.value[i] : letters[Math.floor(Math.random() * 23)])
             .join("");
-        
         if(iteration >= nameElement.dataset.value.length) clearInterval(interval);
-        iteration += 1 / 3;
-    }, 35);
+        iteration += 1/2;
+    }, 40);
 }
 
-// --- BOOT SEQUENCE ---
+// --- INITIALIZE UI ---
 window.addEventListener('load', () => {
     document.getElementById('window').classList.add('active');
-    setTimeout(scramble, 600);
-    
-    const sections = document.querySelectorAll('.section');
-    sections.forEach((s, i) => {
-        setTimeout(() => s.classList.add('visible'), 800 + (i * 180));
+    setTimeout(scramble, 500);
+    document.querySelectorAll('.section').forEach((s, i) => {
+        setTimeout(() => s.classList.add('visible'), 800 + (i * 150));
     });
 });
 
-// --- CURSOR & GLOW ---
-const dot=document.getElementById("cursor-dot");
-const ring=document.getElementById("cursor-ring");
-const glow=document.getElementById("mouse-glow");
-let mx=0, my=0, rx=0, ry=0;
+// --- DESKTOP MOUSE EFFECTS ---
+const dot = document.getElementById("cursor-dot");
+const ring = document.getElementById("cursor-ring");
+const glow = document.getElementById("mouse-glow");
+let mx = 0, my = 0, rx = 0, ry = 0;
 
-document.addEventListener("mousemove", e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left = mx + "px"; dot.style.top = my + "px";
-    glow.style.left = mx + "px"; glow.style.top = my + "px";
-});
+if (window.matchMedia("(pointer: fine)").matches) {
+    document.addEventListener("mousemove", e => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx + "px"; dot.style.top = my + "px";
+        glow.style.display = "block";
+        glow.style.left = mx + "px"; glow.style.top = my + "px";
+    });
 
-function animateCursor() {
-    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-    ring.style.left = rx + "px"; ring.style.top = ry + "px";
-    requestAnimationFrame(animateCursor);
+    function animateCursor() {
+        rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
+        ring.style.left = rx + "px"; ring.style.top = ry + "px";
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    document.querySelectorAll('a, .data-card, .role-tag').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
 }
-animateCursor();
 
-const interactables = document.querySelectorAll('a, .data-card, .role-tag');
-interactables.forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-});
-
-// --- BACKGROUND CANVAS ---
+// --- RESPONSIVE CANVAS ANIMATION ---
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let points = [];
@@ -275,11 +263,13 @@ let points = [];
 function init() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    points = Array.from({length: 70}, () => ({
+    // Lower density for mobile, higher for desktop
+    const count = window.innerWidth < 600 ? 35 : 75;
+    points = Array.from({length: count}, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3
     }));
 }
 
@@ -290,13 +280,14 @@ function draw() {
         if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
         
-        ctx.fillStyle = "rgba(0, 240, 255, 0.3)";
-        ctx.beginPath(); ctx.arc(p.x, p.y, 1.2, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "rgba(0, 240, 255, 0.4)";
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI*2); ctx.fill();
 
         points.forEach(p2 => {
             let d = Math.hypot(p.x - p2.x, p.y - p2.y);
-            if(d < 140) {
-                ctx.strokeStyle = `rgba(195, 0, 255, ${0.15 - d/1000})`;
+            let limit = window.innerWidth < 600 ? 100 : 150;
+            if(d < limit) {
+                ctx.strokeStyle = `rgba(195, 0, 255, ${0.15 - d/limit/5})`;
                 ctx.lineWidth = 0.5;
                 ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
             }
@@ -304,6 +295,7 @@ function draw() {
     });
     requestAnimationFrame(draw);
 }
+
 window.addEventListener('resize', init);
 init(); draw();
 </script>
