@@ -2,121 +2,110 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BALAMURALI KRISHNA M | CYBER PORTFOLIO</title>
+<title>BALAMURALI KRISHNA M | CYBER OPS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
 :root {
-    --primary: #00f0ff;
-    --primary-dim: rgba(0,240,255,0.15);
-    --accent: #c300ff;
-    --bg: #0d001a;
-    --text-dim: #a78bfa;
-    --text: #f0f0ff;
-    --card-bg: rgba(20,10,40,0.8);
+    --primary: #00ff9d; /* Tactical Green */
+    --accent: #0088ff;  /* Alert Blue */
+    --bg: #030812;
+    --text: #e0f2f1;
+    --dim: rgba(0, 255, 157, 0.2);
+    --card: rgba(5, 15, 25, 0.9);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-/* Hide cursor on desktop, but allow interaction on mobile */
-@media (pointer: fine) {
-    * { cursor: none !important; }
-}
+@media (pointer: fine) { * { cursor: none !important; } }
 
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Courier New', Consolas, monospace;
-    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow-x: hidden;
-    -webkit-tap-highlight-color: transparent;
+    line-height: 1.4;
 }
 
-/* --- ADAPTIVE BACKGROUND --- */
-#bg-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.35; pointer-events: none; }
-#mouse-glow {
-    position: fixed; width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(195,0,255,0.1) 0%, rgba(0,240,255,0.05) 40%, transparent 70%);
-    filter: blur(60px); pointer-events: none; z-index: -1; transform: translate(-50%, -50%);
-    display: none; /* Only show on desktop mousemove */
+/* --- TACTICAL BACKGROUND --- */
+#bg-canvas { position: fixed; inset: 0; z-index: -2; }
+.scan-line {
+    position: fixed; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    z-index: -1; opacity: 0.2; pointer-events: none;
+    animation: scan 8s linear infinite;
 }
+@keyframes scan { 0% { top: -10%; } 100% { top: 110%; } }
 
-/* --- CURSOR (Hidden on Mobile) --- */
+/* --- THE SAME SIGNATURE CURSOR --- */
 #cursor-dot, #cursor-ring {
-    position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%);
-    display: none;
+    position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); display: none;
 }
 @media (pointer: fine) {
     #cursor-dot { display: block; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; }
     #cursor-ring { 
         display: block; width: 30px; height: 30px; border: 1.5px solid var(--primary); border-radius: 50%;
-        transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s;
+        transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.3s;
     }
-    .cursor-hover #cursor-ring { width: 50px; height: 50px; border-color: var(--accent); background: rgba(195,0,255,0.05); }
+    .hover-state #cursor-ring { width: 50px; height: 50px; border-color: var(--accent); background: rgba(0, 136, 255, 0.1); }
 }
 
-/* --- RESPONSIVE TERMINAL --- */
-.container { width: 100%; max-width: 1100px; margin: auto; padding: 1.5rem; }
+/* --- INTERFACE LAYOUT --- */
+.container { max-width: 1200px; margin: auto; padding: 20px; }
 
-.terminal-window {
-    background: var(--card-bg);
-    border: 1px solid var(--primary-dim);
-    border-radius: 12px; padding: 2rem;
-    backdrop-filter: blur(15px);
-    opacity: 0; transform: translateY(20px);
-    transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 1, 0.3, 1);
+.header-panel {
+    border-left: 5px solid var(--primary);
+    padding: 20px; background: var(--card);
+    margin-bottom: 40px; position: relative;
+    overflow: hidden; opacity: 0; transform: skewX(-5deg) translateX(-50px);
+    transition: all 0.8s ease-out;
 }
-.terminal-window.active { opacity: 1; transform: translateY(0); }
+.active.header-panel { opacity: 1; transform: skewX(0) translateX(0); }
+
+#glitch-name {
+    font-size: clamp(1.8rem, 6vw, 3.5rem);
+    font-weight: 900; letter-spacing: 2px; color: var(--primary);
+    text-shadow: 2px 2px var(--bg), 4px 4px var(--dim);
+}
+
+.status-bar { font-family: monospace; font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; display: flex; justify-content: space-between; }
+
+/* --- CARDS & GRIDS --- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+.tactical-card {
+    background: var(--card); border: 1px solid var(--dim);
+    padding: 25px; position: relative; transition: 0.3s;
+    opacity: 0; transform: translateY(30px);
+}
+.visible.tactical-card { opacity: 1; transform: translateY(0); }
+
+.tactical-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 10px;
+    border-top: 2px solid var(--primary); border-left: 2px solid var(--primary);
+}
+
+.tactical-card:hover { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 255, 157, 0.1); }
+
+.tag {
+    display: inline-block; padding: 2px 10px; border: 1px solid var(--accent);
+    color: var(--accent); font-size: 0.7rem; margin-right: 5px; text-transform: uppercase;
+}
+
+h2 { font-size: 1rem; color: var(--accent); letter-spacing: 3px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid var(--dim); display: inline-block; }
+
+.data-point { margin-bottom: 15px; }
+.data-point b { color: var(--primary); font-size: 0.9rem; display: block; }
+.data-point p { font-size: 0.85rem; color: #a0b0c0; }
+
+.footer { margin-top: 50px; text-align: center; border-top: 1px solid var(--dim); padding-top: 30px; }
+.footer a { color: var(--primary); font-size: 1.5rem; margin: 0 20px; transition: 0.3s; }
+.footer a:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
 @media (max-width: 600px) {
-    .container { padding: 0.8rem; }
-    .terminal-window { padding: 1.2rem; border-radius: 8px; }
-}
-
-.terminal-top {
-    display: flex; justify-content: space-between; border-bottom: 1px solid var(--primary-dim);
-    padding-bottom: 0.8rem; margin-bottom: 2rem; color: var(--text-dim); font-size: 0.75rem;
-}
-
-#scramble-name {
-    font-size: clamp(1.8rem, 8vw, 4.5rem);
-    font-weight: 900; color: var(--primary);
-    margin: 1rem 0; word-break: break-word;
-}
-
-.role-tag {
-    display: inline-block; padding: 0.3rem 0.8rem; margin: 4px 6px 4px 0;
-    border: 1px solid var(--accent); color: var(--accent); border-radius: 4px;
-    font-size: 0.8rem;
-}
-
-.section { margin-bottom: 3.5rem; opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
-.section.visible { opacity: 1; transform: translateY(0); }
-
-.section-title {
-    color: var(--primary); font-size: 1.1rem; margin-bottom: 1.2rem;
-    display: flex; align-items: center; gap: 10px;
-}
-
-.grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
-
-.data-card {
-    background: rgba(255,255,255,0.03); border: 1px solid var(--primary-dim);
-    padding: 1.5rem; border-radius: 8px;
-}
-.data-card strong { color: var(--primary); display: block; margin-bottom: 0.4rem; font-size: 1.1rem; }
-.data-card p, .data-card li { font-size: 0.9rem; color: var(--text-dim); }
-.data-card ul { list-style: none; margin-top: 10px; }
-.data-card li::before { content: "> "; color: var(--accent); }
-
-.footer-icons { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
-.footer-icons a { color: var(--primary); font-size: 1.8rem; transition: 0.3s; }
-
-/* Desktop-only Hover */
-@media (hover: hover) {
-    .data-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-    .footer-icons a:hover { color: var(--accent); transform: scale(1.2); }
+    .container { padding: 10px; }
+    .header-panel { padding: 15px; }
 }
 </style>
 </head>
@@ -124,78 +113,82 @@ body {
 <body>
 
 <canvas id="bg-canvas"></canvas>
+<div class="scan-line"></div>
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
-<div id="mouse-glow"></div>
 
 <div class="container">
-    <div class="terminal-window" id="window">
-        <div class="terminal-top">
-            <div><i class="fas fa-code-branch"></i> PORTFOLIO_v2.0</div>
-            <div id="clock">00:00:00</div>
+    <div class="header-panel" id="main-panel">
+        <div class="status-bar">
+            <span>[ SYSTEM OPERATIONAL ]</span>
+            <span id="clock">00:00:00</span>
+        </div>
+        <h1 id="glitch-name">BALAMURALI KRISHNA M</h1>
+        <p style="color: var(--accent); font-family: monospace;">> MCA Cybersecurity | Network Defense Specialist</p>
+    </div>
+
+    <div class="grid">
+        <div class="tactical-card sec">
+            <h2>01_Mission_Profile</h2>
+            <p style="font-size: 0.9rem;">High-foundation Cybersecurity professional with MCA specialization. Expertise in SOC operations, incident triage, and infrastructure security. Focused on L1/L2 network defense and enterprise troubleshooting.</p>
         </div>
 
-        <div class="section">
-            <h1 id="scramble-name" data-value="Balamurali Krishna M">BALAMURALI</h1>
-            <div class="roles">
-                <span class="role-tag">SOC Analyst</span>
-                <span class="role-tag">Network Security</span>
+        <div class="tactical-card sec">
+            <h2>02_Training_Data</h2>
+            <div class="data-point">
+                <b>MCA - Cybersecurity</b>
+                <p>S-VYASA University | 2025 - 2027</p>
+                <span class="tag">Forensics</span><span class="tag">Ethical Hacking</span>
             </div>
-            <p style="margin-top: 1.5rem; color: var(--text-dim); font-size: 0.95rem;">
-                Bengaluru-based Cybersecurity professional specializing in threat analysis and system defense. 
-                MCA (Cybersecurity) Candidate.
-            </p>
-        </div>
-
-        <div class="section">
-            <div class="section-title"><i class="fas fa-briefcase"></i> EXPERIENCE</div>
-            <div class="grid-layout">
-                <div class="data-card">
-                    <strong>Field Support Engineer</strong>
-                    <small>Quess Corp Ltd | 2023 - 2025</small>
-                    <p style="margin-top:8px;">L1/L2 Infrastructure support and technical troubleshooting.</p>
-                </div>
-                <div class="data-card">
-                    <strong>IT Intern</strong>
-                    <small>Novozymes South Asia | 2025</small>
-                    <p style="margin-top:8px;">Windows OS deployment and asset management.</p>
-                </div>
+            <div class="data-point">
+                <b>BCA - Computer Apps</b>
+                <p>Bangalore University | 2022 - 2025</p>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title"><i class="fas fa-certificate"></i> CERTIFICATIONS</div>
-            <div class="grid-layout">
-                <div class="data-card">
-                    <strong>IBM Cyber Analyst</strong>
-                    <p>Professional Certificate in Incident Response & SIEM.</p>
-                </div>
-                <div class="data-card">
-                    <strong>Cisco CCNA</strong>
-                    <p>Network fundamentals, Routing, and Switching.</p>
-                </div>
+        <div class="tactical-card sec">
+            <h2>03_Field_Experience</h2>
+            <div class="data-point">
+                <b>Field Support Engineer</b>
+                <p>Quess Corp Ltd | 2023 - 2025</p>
+                <span class="tag">L1/L2 Support</span><span class="tag">SLA Management</span>
+            </div>
+            <div class="data-point">
+                <b>IT Intern</b>
+                <p>Novozymes South Asia | 2025</p>
+                <span class="tag">OS Deployment</span>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title"><i class="fas fa-project-diagram"></i> PROJECTS</div>
-            <div class="grid-layout">
-                <div class="data-card">
-                    <strong>VLAN Routing Lab</strong>
-                    <p>Secure network segmentation using Cisco Packet Tracer and ACLs.</p>
-                </div>
-                <div class="data-card">
-                    <strong>SIEM Triage</strong>
-                    <p>Simulated SOC workflow using Splunk for log analysis and alerting.</p>
-                </div>
+        <div class="tactical-card sec">
+            <h2>04_Tactical_Stack</h2>
+            <div class="data-point">
+                <b>Networking & Security</b>
+                <p>VLAN, TCP/IP, SIEM (Splunk), Wireshark, Nmap, Cisco Packet Tracer.</p>
+            </div>
+            <div class="data-point">
+                <b>Certifications</b>
+                <p>IBM Cybersecurity Analyst, CCNA Training, MCSA Training.</p>
             </div>
         </div>
 
-        <div class="footer-icons">
-            <a href="https://linkedin.com/in/balamurali-krishna-m-377579267" target="_blank"><i class="fab fa-linkedin"></i></a>
-            <a href="https://github.com/Balamuralikrishna2004" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="mailto:your.email@gmail.com"><i class="fas fa-envelope"></i></a>
+        <div class="tactical-card sec">
+            <h2>05_Operations_Logs</h2>
+            <div class="data-point">
+                <b>VLAN Segmentation</b>
+                <p>Implemented enterprise-grade network security using Cisco ACLs.</p>
+            </div>
+            <div class="data-point">
+                <b>SOC Analysis Sim</b>
+                <p>Incident response simulation involving log analysis and alert triage.</p>
+            </div>
         </div>
+    </div>
+
+    <div class="footer">
+        <a href="https://linkedin.com/in/balamurali-krishna-m-377579267" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/Balamuralikrishna2004" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="mailto:your.email@gmail.com"><i class="fas fa-envelope"></i></a>
     </div>
 </div>
 
@@ -205,41 +198,23 @@ setInterval(() => {
     document.getElementById("clock").innerText = new Date().toLocaleTimeString('en-GB');
 }, 1000);
 
-// --- SCRAMBLE EFFECT ---
-const nameElement = document.getElementById("scramble-name");
-function scramble() {
-    const letters = "ABCDEFGH#%&$@0123456789";
-    let iteration = 0;
-    const interval = setInterval(() => {
-        nameElement.innerText = nameElement.dataset.value.split("")
-            .map((l, i) => i < iteration ? nameElement.dataset.value[i] : letters[Math.floor(Math.random() * 23)])
-            .join("");
-        if(iteration >= nameElement.dataset.value.length) clearInterval(interval);
-        iteration += 1/2;
-    }, 40);
-}
-
 // --- INITIALIZE UI ---
 window.addEventListener('load', () => {
-    document.getElementById('window').classList.add('active');
-    setTimeout(scramble, 500);
-    document.querySelectorAll('.section').forEach((s, i) => {
-        setTimeout(() => s.classList.add('visible'), 800 + (i * 150));
+    document.getElementById('main-panel').classList.add('active');
+    document.querySelectorAll('.sec').forEach((s, i) => {
+        setTimeout(() => s.classList.add('visible'), 400 + (i * 100));
     });
 });
 
-// --- DESKTOP MOUSE EFFECTS ---
+// --- CURSOR ---
 const dot = document.getElementById("cursor-dot");
 const ring = document.getElementById("cursor-ring");
-const glow = document.getElementById("mouse-glow");
 let mx = 0, my = 0, rx = 0, ry = 0;
 
 if (window.matchMedia("(pointer: fine)").matches) {
     document.addEventListener("mousemove", e => {
         mx = e.clientX; my = e.clientY;
         dot.style.left = mx + "px"; dot.style.top = my + "px";
-        glow.style.display = "block";
-        glow.style.left = mx + "px"; glow.style.top = my + "px";
     });
 
     function animateCursor() {
@@ -249,55 +224,53 @@ if (window.matchMedia("(pointer: fine)").matches) {
     }
     animateCursor();
 
-    document.querySelectorAll('a, .data-card, .role-tag').forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    document.querySelectorAll('a, .tactical-card, .tag').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('hover-state'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('hover-state'));
     });
 }
 
-// --- RESPONSIVE CANVAS ANIMATION ---
+// --- GRID CANVAS ANIMATION ---
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
-let points = [];
 
-function init() {
+function initCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    // Lower density for mobile, higher for desktop
-    const count = window.innerWidth < 600 ? 35 : 75;
-    points = Array.from({length: count}, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3
-    }));
 }
 
-function draw() {
+function drawGrid() {
     ctx.clearRect(0,0,canvas.width, canvas.height);
-    points.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        
-        ctx.fillStyle = "rgba(0, 240, 255, 0.4)";
-        ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = "rgba(0, 255, 157, 0.05)";
+    ctx.lineWidth = 1;
 
-        points.forEach(p2 => {
-            let d = Math.hypot(p.x - p2.x, p.y - p2.y);
-            let limit = window.innerWidth < 600 ? 100 : 150;
-            if(d < limit) {
-                ctx.strokeStyle = `rgba(195, 0, 255, ${0.15 - d/limit/5})`;
-                ctx.lineWidth = 0.5;
-                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-            }
-        });
-    });
-    requestAnimationFrame(draw);
+    const size = 50;
+    const shift = (Date.now() / 50) % size;
+
+    for (let x = shift; x < canvas.width; x += size) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+    }
+    for (let y = shift; y < canvas.height; y += size) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+    
+    // Circular Pulse
+    const time = Date.now() / 1000;
+    const pulseX = (Math.sin(time) * 0.5 + 0.5) * canvas.width;
+    const pulseY = (Math.cos(time) * 0.5 + 0.5) * canvas.height;
+    
+    let grad = ctx.createRadialGradient(pulseX, pulseY, 0, pulseX, pulseY, 300);
+    grad.addColorStop(0, "rgba(0, 255, 157, 0.05)");
+    grad.addColorStop(1, "transparent");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,canvas.width, canvas.height);
+
+    requestAnimationFrame(drawGrid);
 }
 
-window.addEventListener('resize', init);
-init(); draw();
+window.addEventListener('resize', initCanvas);
+initCanvas();
+drawGrid();
 </script>
 
 </body>
