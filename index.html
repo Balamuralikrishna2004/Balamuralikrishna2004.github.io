@@ -1,313 +1,498 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>BALA MURALI KRISHNA | CYBER DEFENSE</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balamurali Krishna | SOC Analyst Portfolio</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
 
-<style>
-:root {
-    --primary: #00f2ff; /* Electric Cyan */
-    --accent: #7000ff;  /* Neon Purple */
-    --bg: #050508;
-    --text: #e2e8f0;
-    --text-dim: #94a3b8;
-    --glass: rgba(15, 23, 42, 0.6);
-    --border: rgba(255, 255, 255, 0.08);
-}
+        :root {
+            --bmw-black: #0a0a0a;
+            --bmw-dark-grey: #1c1c1c;
+            --bmw-silver: #e0e0e0;
+            --m-light-blue: #00AEEF;
+            --m-dark-blue: #0066B2;
+            --m-red: #FF0000;
+            --neon-shadow: 0 0 15px rgba(0, 174, 239, 0.4);
+        }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+            list-style: none;
+            scroll-behavior: smooth;
+        }
 
-@media (pointer: fine) { * { cursor: none !important; } }
+        body {
+            background-color: var(--bmw-black);
+            color: var(--bmw-silver);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
 
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    overflow-x: hidden;
-    line-height: 1.6;
-}
+        /* Carbon Fiber Pattern Background */
+        section {
+            padding: 100px 10%;
+            background-image: 
+                linear-gradient(45deg, #111 25%, transparent 25%), 
+                linear-gradient(-45deg, #111 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #111 75%), 
+                linear-gradient(-45deg, transparent 75%, #111 75%);
+            background-size: 8px 8px;
+            border-bottom: 1px solid #222;
+        }
 
-/* --- THE AMBIENT BACKGROUND --- */
-#bg-canvas { position: fixed; inset: 0; z-index: -3; }
-.vignette {
-    position: fixed; inset: 0;
-    background: radial-gradient(circle at center, transparent 0%, rgba(5, 5, 8, 0.8) 100%);
-    pointer-events: none; z-index: -2;
-}
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 20px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.4s;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+        }
 
-/* --- THE SIGNATURE CURSOR --- */
-#cursor-dot {
-    position: fixed; width: 6px; height: 6px; background: #fff;
-    border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%);
-}
-#cursor-ring {
-    position: fixed; width: 35px; height: 35px; border: 1.5px solid var(--primary);
-    border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%);
-    transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), height 0.3s, border-color 0.3s;
-}
+        header.sticky {
+            padding: 12px 10%;
+            border-bottom: 2px solid var(--m-dark-blue);
+        }
 
-/* --- MAIN INTERFACE --- */
-.container { max-width: 900px; margin: 60px auto; padding: 0 25px; }
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-.glass-panel {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    border-radius: 24px; padding: 50px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-    opacity: 0; transform: translateY(40px);
-    transition: 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.glass-panel.active { opacity: 1; transform: translateY(0); }
+        .logo span { color: var(--m-light-blue); }
 
-/* --- TYPOGRAPHY & ALIGNMENT --- */
-.section { margin-bottom: 60px; opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
-.section.visible { opacity: 1; transform: translateY(0); }
+        .navlist { display: flex; }
+        .navlist a {
+            color: white;
+            font-weight: 600;
+            margin-left: 30px;
+            text-transform: uppercase;
+            font-size: 13px;
+            transition: 0.3s;
+        }
 
-.kicker {
-    font-family: 'Courier New', monospace;
-    font-size: 0.75rem; color: var(--primary);
-    text-transform: uppercase; letter-spacing: 4px;
-    margin-bottom: 10px; display: block;
-}
+        .navlist a:hover, .navlist a.active {
+            color: var(--m-light-blue);
+            text-shadow: var(--neon-shadow);
+        }
 
-#name-resolve {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    font-weight: 800; color: #fff; letter-spacing: -2px;
-    margin-bottom: 15px;
-}
+        /* BMW M-Sport Stripe Component */
+        .m-stripe {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--m-light-blue) 33.3%, var(--m-dark-blue) 33.3%, var(--m-dark-blue) 66.6%, var(--m-red) 66.6%);
+            margin-bottom: 15px;
+        }
 
-.sub-roles {
-    display: flex; gap: 15px; margin-bottom: 30px;
-    font-family: 'Courier New', monospace; font-size: 0.85rem;
-}
-.role { color: var(--accent); font-weight: bold; }
+        /* Home Section */
+        .home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
 
-.bio { color: var(--text-dim); font-size: 1.05rem; max-width: 650px; margin-bottom: 40px; }
+        .home-content h1 {
+            font-size: 60px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
 
-/* --- EXPERTISE CARDS (ONE BY ONE) --- */
-.entry-group { border-top: 1px solid var(--border); padding-top: 30px; }
+        .change-text {
+            margin-top: 25px;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
 
-.data-row {
-    display: flex; flex-direction: column; gap: 8px; margin-bottom: 35px;
-    position: relative; padding-left: 20px;
-}
-.data-row::before {
-    content: ""; position: absolute; left: 0; top: 0; width: 2px; height: 100%;
-    background: linear-gradient(to bottom, var(--primary), transparent);
-}
+        .change-text h3 {
+            font-size: 28px;
+            font-weight: 600;
+            position: relative;
+        }
+        .word {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            color: var(--m-light-blue);
+            white-space: nowrap;
+        }
+        .letter {
+            display: inline-block;
+            transition: 0.4s ease;
+        }
 
-.data-row h3 { font-size: 1.2rem; color: #fff; }
-.data-row .meta { font-size: 0.85rem; color: var(--accent); font-weight: 600; text-transform: uppercase; }
-.data-row p { font-size: 0.95rem; color: var(--text-dim); }
+        .letter.out { transform: translateY(-100%); }
+        .letter.in { transform: translateY(0); }
+        .letter.behind { transform: translateY(100%); }
 
-.skill-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.pill {
-    font-size: 0.7rem; padding: 4px 12px; border-radius: 100px;
-    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
-    color: var(--text); transition: 0.3s;
-}
-.pill:hover { border-color: var(--primary); background: rgba(0, 242, 255, 0.05); }
+        /* Buttons */
+        .btn-box {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+        }
 
-.contact-bar {
-    display: flex; gap: 40px; margin-top: 50px;
-    border-top: 1px solid var(--border); padding-top: 30px;
-}
-.contact-bar a {
-    color: var(--text); text-decoration: none; font-size: 1.2rem;
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.contact-bar a:hover { color: var(--primary); transform: translateY(-5px) scale(1.1); }
+        .btn {
+            padding: 12px 30px;
+            background: var(--m-dark-blue);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            transition: 0.4s;
+            cursor: pointer;
+            position: relative;
+            box-shadow: -4px 0 0 var(--m-light-blue), 4px 0 0 var(--m-red);
+        }
 
-@media (max-width: 600px) {
-    .glass-panel { padding: 30px 20px; border-radius: 0; border: none; background: transparent; backdrop-filter: none; }
-    .container { margin: 20px auto; }
-}
-</style>
+        .btn:hover {
+            transform: skewX(-10deg);
+            background: var(--m-red);
+            color: white;
+        }
+
+        /* Grid Layouts for Projects/Certs */
+        .main-text { text-align: center; margin-bottom: 50px; }
+        .main-text h2 { font-size: 40px; font-style: italic; text-transform: uppercase; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--bmw-dark-grey);
+            padding: 30px;
+            border-left: 5px solid var(--m-dark-blue);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-left-color: var(--m-red);
+            transform: translateY(-10px);
+            background: #252525;
+        }
+
+        .card h3 { color: var(--m-light-blue); margin-bottom: 15px; text-transform: uppercase; }
+        .card p { font-size: 14px; color: #ccc; }
+        .card .tag { 
+            font-size: 10px; 
+            background: #333; 
+            padding: 2px 8px; 
+            border-radius: 2px; 
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* Skill Gauges */
+        .skills-section { background: var(--bmw-dark-grey); }
+        .skill-bar { margin-bottom: 25px; }
+        .skill-info { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; }
+        .bar-outer { height: 12px; background: #000; border-radius: 2px; position: relative; }
+        .bar-inner { 
+            height: 100%; 
+            background: linear-gradient(90deg, var(--m-dark-blue), var(--m-light-blue));
+            box-shadow: var(--neon-shadow);
+            width: 0;
+            transition: 2s ease-in-out;
+        }
+
+        /* Contact Section */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            outline: none;
+            border-radius: 2px;
+        }
+
+        input:focus { border-color: var(--m-light-blue); }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            background: #050505;
+            border-top: 1px solid #222;
+        }
+
+        /* Animations */
+        .scroll-reveal { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
+        .scroll-reveal.show { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .navlist { display: none; }
+            .home-content h1 { font-size: 40px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<canvas id="bg-canvas"></canvas>
-<div class="vignette"></div>
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
+<header>
+    <div class="logo">BMK<span>.M-SPORT</span></div>
+    <ul class="navlist">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Performance</a></li>
+        <li><a href="#projects">Garage</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div id="menu-icon" class="bx bx-menu"></div>
+</header>
 
-<div class="container">
-    <div class="glass-panel" id="panel">
-        
-        <header class="section">
-            <span class="kicker">Security Operations Analyst</span>
-            <h1 id="name-resolve" data-value="BALA MURALI KRISHNA M">BALA MURALI KRISHNA M</h1>
-            <div class="sub-roles">
-                <span class="role">// NET_ENG</span>
-                <span class="role">// CYBER_DEFENSE</span>
-                <span class="role">// CLOUD_OPS</span>
-            </div>
-            <p class="bio">
-                Specializing in infrastructure integrity and incident triage. Currently architecting my expertise through an MCA in Cybersecurity at S-VYASA University.
-            </p>
-        </header>
-
-        <div class="section">
-            <span class="kicker">Professional History</span>
-            <div class="entry-group">
-                <div class="data-row">
-                    <h3>Field Support Engineer</h3>
-                    <div class="meta">Quess Corp Ltd | 2023 — 2025</div>
-                    <p>Orchestrated L1/L2 infrastructure support and resolved complex network anomalies under strict SLA protocols.</p>
-                </div>
-                <div class="data-row">
-                    <h3>IT Systems Intern</h3>
-                    <div class="meta">Novozymes South Asia | 2025</div>
-                    <p>Managed secure OS deployment and enterprise asset configuration within a high-compliance environment.</p>
-                </div>
-            </div>
+<section id="home" class="home">
+    <div class="home-content">
+        <div class="m-stripe"></div>
+        <h1>BALAMURALI <br>KRISHNA. M</h1>
+        <div class="change-text">
+            <h3>
+                <span class="word">SOC Analyst</span>
+                <span class="word">Network Engineer</span>
+                <span class="word">Cybersecurity Specialist</span>
+                <span class="word">IBM Certified</span>
+            </h3>
         </div>
 
-        <div class="section">
-            <span class="kicker">Tactical Stack</span>
-            <div class="entry-group">
-                <div class="data-row">
-                    <h3>Defensive Capabilities</h3>
-                    <div class="skill-pills">
-                        <span class="pill">Splunk SIEM</span>
-                        <span class="pill">Wireshark</span>
-                        <span class="pill">Nmap</span>
-                        <span class="pill">IBM Cyber Analyst</span>
-                        <span class="pill">Log Triage</span>
-                    </div>
-                </div>
-                <div class="data-row">
-                    <h3>Networking & Systems</h3>
-                    <div class="skill-pills">
-                        <span class="pill">VLAN Routing</span>
-                        <span class="pill">TCP/IP</span>
-                        <span class="pill">CCNA</span>
-                        <span class="pill">MCSA</span>
-                        <span class="pill">Active Directory</span>
-                    </div>
-                </div>
-            </div>
+        <p style="max-width: 600px; margin-top: 20px; color: #aaa;">
+            Precision-engineered cybersecurity professional specialized in L1 SOC operations and Network architecture. 
+            Currently pursuing MCA with a focus on threat hunting and intrusion detection.
+        </p>
+        <div class="btn-box">
+            <a href="#contact" class="btn">Launch Engine (Contact)</a>
+            <a href="https://www.linkedin.com/in/balamurali-krishna-m" target="_blank" class="btn" style="background: #333;">LinkedIn</a>
         </div>
-
-        <div class="section">
-            <span class="kicker">Operation Logs</span>
-            <div class="entry-group">
-                <div class="data-row">
-                    <h3>VLAN Segmentation Architecture</h3>
-                    <p>Engineered a segmented network topology using Cisco Packet Tracer to mitigate unauthorized lateral movement.</p>
-                </div>
-                <div class="data-row">
-                    <h3>SOC Incident Analysis Lab</h3>
-                    <p>Developed a simulation environment for real-time log ingestion and threat actor pattern recognition.</p>
-                </div>
-            </div>
-        </div>
-
-        <footer class="section">
-            <div class="contact-bar">
-                <a href="mailto:balamuralikrishna2004@gmail.com"><i class="fas fa-envelope"></i></a>
-                <a href="https://linkedin.com/in/balamurali-krishna-m-377579267" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/Balamuralikrishna2004" target="_blank"><i class="fab fa-github"></i></a>
-            </div>
-        </footer>
-
     </div>
-</div>
+</section>
+
+<section id="about" class="scroll-reveal">
+    <div class="m-stripe"></div>
+    <div class="main-text">
+        <h2>Driver Profile</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+        <div>
+            <h3 style="color: var(--m-light-blue); margin-bottom: 15px;">Summary</h3>
+            <p>BCA Graduate (GPA 8.37) and MCA candidate. Experienced in technical troubleshooting at Quess Corp (Client: Bangalore) and IT asset management at Novozymes. Dedicated to creating secure, responsive network environments.</p>
+        </div>
+        <div>
+            <h3 style="color: var(--m-light-blue); margin-bottom: 15px;">Education</h3>
+            <p><strong>MCA</strong> - S-VYASA University (2025 - 2027)</p>
+            <p><strong>BCA</strong> - Bangalore University (2022 - 2025)</p>
+            <p><strong>PUC</strong> - Om Sai PU College (GPA 86%)</p>
+        </div>
+    </div>
+</section>
+
+<section id="skills" class="skills-section scroll-reveal">
+    <div class="m-stripe"></div>
+    <div class="main-text">
+        <h2>Performance Metrics</h2>
+    </div>
+    <div class="grid-container">
+        <div class="skill-bar">
+            <div class="skill-info"><span>Cybersecurity / SOC</span><span>85%</span></div>
+            <div class="bar-outer"><div class="bar-inner" data-width="85%"></div></div>
+        </div>
+        <div class="skill-bar">
+            <div class="skill-info"><span>Networking (VLAN/ACLs)</span><span>90%</span></div>
+            <div class="bar-outer"><div class="bar-inner" data-width="90%"></div></div>
+        </div>
+        <div class="skill-bar">
+            <div class="skill-info"><span>Wireshark / Splunk</span><span>80%</span></div>
+            <div class="bar-outer"><div class="bar-inner" data-width="80%"></div></div>
+        </div>
+        <div class="skill-bar">
+            <div class="skill-info"><span>System Admin (AD)</span><span>75%</span></div>
+            <div class="bar-outer"><div class="bar-inner" data-width="75%"></div></div>
+        </div>
+    </div>
+</section>
+
+
+
+<section id="projects" class="scroll-reveal">
+    <div class="m-stripe"></div>
+    <div class="main-text">
+        <h2>The Garage (Projects)</h2>
+    </div>
+    <div class="grid-container">
+        <div class="card">
+            <span class="tag">Security Lab</span>
+            <h3>SOC Incident Analysis</h3>
+            <p>Simulated L1 SOC monitoring using SIEM platforms (Splunk/ELK). Monitored brute-force and malware attacks in virtual environments.</p>
+        </div>
+        <div class="card">
+            <span class="tag">Network Design</span>
+            <h3>VLAN & Inter-VLAN</h3>
+            <p>Configured department isolation and secure routing using Cisco Packet Tracer to enhance network security and segmentation.</p>
+        </div>
+        <div class="card">
+            <span class="tag">Experience</span>
+            <h3>IT Operations Intern</h3>
+            <p>Worked with Novozymes South Asia on Windows OS configuration, IT asset management, and end-user hardware troubleshooting.</p>
+        </div>
+    </div>
+</section>
+
+<section id="certifications" class="scroll-reveal">
+    <div class="m-stripe"></div>
+    <div class="main-text">
+        <h2>Modifications (Certifications)</h2>
+    </div>
+    <div class="grid-container">
+        <div class="card">
+            <h3>IBM Cybersecurity Analyst</h3>
+            <p>Professional Certificate via Coursera covering threat intelligence and incident response.</p>
+        </div>
+        <div class="card">
+            <h3>CCNA & MCSA Training</h3>
+            <p>Alpha Tech Academy (2025). High-performance training in Cisco and Microsoft ecosystems.</p>
+        </div>
+        <div class="card">
+            <h3>Cisco Networking Basics</h3>
+            <p>Initial Configuration and Networking fundamentals via Cisco Academy.</p>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="scroll-reveal">
+    <div class="m-stripe"></div>
+    <div class="main-text">
+        <h2>Contact the Driver</h2>
+    </div>
+    <form id="contact-form">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="5" placeholder="Transmission Details (Message)"></textarea>
+        <button type="submit" class="btn">Send Signal</button>
+    </form>
+    <div style="text-align: center; margin-top: 30px;">
+        <p><i class='bx bxs-phone'></i> +91 7829789734</p>
+        <p><i class='bx bxs-envelope'></i> balamuralikrishna2004@gmail.com</p>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2026 Balamurali Krishna. The Ultimate SOC Machine.</p>
+    <a href="#home" style="color: var(--m-light-blue); margin-top: 20px; display: inline-block;"><i class='bx bx-chevron-up-circle bx-md'></i></a>
+</footer>
 
 <script>
-const panel = document.getElementById('panel');
-const sections = document.querySelectorAll('.section');
-
-window.addEventListener('load', () => {
-    panel.classList.add('active');
-    sections.forEach((s, i) => {
-        setTimeout(() => s.classList.add('visible'), 600 + (i * 200));
-    });
-    resolveName();
-});
-
-// --- DECRYPTION EFFECT ---
-function resolveName() {
-    const el = document.getElementById('name-resolve');
-    const original = el.dataset.value;
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
-    let iteration = 0;
-    
-    const interval = setInterval(() => {
-        el.innerText = original.split("").map((letter, index) => {
-            if(index < iteration) return original[index];
-            return chars[Math.floor(Math.random() * chars.length)];
-        }).join("");
-        
-        if(iteration >= original.length) clearInterval(interval);
-        iteration += 1/3;
-    }, 40);
-}
-
-// --- SMOOTH CURSOR ---
-const dot = document.getElementById("cursor-dot");
-const ring = document.getElementById("cursor-ring");
-let mx = 0, my = 0, rx = 0, ry = 0;
-
-document.addEventListener("mousemove", e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left = mx + "px"; dot.style.top = my + "px";
-});
-
-function animateCursor() {
-    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-    ring.style.left = rx + "px"; ring.style.top = ry + "px";
-    requestAnimationFrame(animateCursor);
-}
-animateCursor();
-
-// --- NEURAL NETWORK BACKGROUND ---
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-let points = [];
-
-function init() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    points = [];
-    for(let i=0; i<60; i++) {
-        points.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5
+    // --- Word Rotation Logic ---
+    let words = document.querySelectorAll(".word");
+    words.forEach((word) => {
+        let letters = word.textContent.split("");
+        word.textContent = "";
+        letters.forEach((letter) => {
+            let span = document.createElement("span");
+            span.textContent = letter === " " ? "\u00A0" : letter;
+            span.className = "letter";
+            word.appendChild(span);
         });
-    }
-}
+    });
 
-function draw() {
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-    points.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        
-        ctx.fillStyle = "rgba(0, 242, 255, 0.2)";
-        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+    let currentWordIndex = 0;
+    let maxWordIndex = words.length - 1;
+    words[currentWordIndex].style.opacity = "1";
 
-        points.forEach(p2 => {
-            let d = Math.hypot(p.x - p2.x, p.y - p2.y);
-            if(d < 150) {
-                ctx.strokeStyle = `rgba(112, 0, 255, ${0.1 - d/1500})`;
-                ctx.lineWidth = 0.5;
-                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+    let rotateText = () => {
+        let currentWord = words[currentWordIndex];
+        let nextWord = currentWordIndex === maxWordIndex ? words[0] : words[currentWordIndex + 1];
+
+        Array.from(currentWord.children).forEach((letter, i) => {
+            setTimeout(() => { letter.className = "letter out"; }, i * 60);
+        });
+
+        nextWord.style.opacity = "1";
+        Array.from(nextWord.children).forEach((letter, i) => {
+            letter.className = "letter behind";
+            setTimeout(() => { letter.className = "letter in"; }, 340 + i * 60);
+        });
+
+        currentWordIndex = currentWordIndex === maxWordIndex ? 0 : currentWordIndex + 1;
+    };
+
+    rotateText();
+    setInterval(rotateText, 3500);
+
+    // --- Sticky Header & Active Menu ---
+    const header = document.querySelector("header");
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll(".navlist a");
+
+    window.addEventListener("scroll", () => {
+        header.classList.toggle("sticky", window.scrollY > 50);
+
+        let current = "";
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 100) {
+                current = section.getAttribute("id");
             }
         });
-    });
-    requestAnimationFrame(draw);
-}
 
-window.addEventListener('resize', init);
-init(); draw();
+        navLinks.forEach(link => {
+            link.classList.remove("active");
+            if (link.getAttribute("href").includes(current)) {
+                link.classList.add("active");
+            }
+        });
+
+        // Trigger Skill Bars
+        if(current === 'skills') {
+            document.querySelectorAll('.bar-inner').forEach(bar => {
+                bar.style.width = bar.getAttribute('data-width');
+            });
+        }
+    });
+
+    // --- Scroll Reveal ---
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) entry.target.classList.add("show");
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(".scroll-reveal").forEach(el => observer.observe(el));
+
+    // --- Form Alert ---
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert("Signal sent successfully. Balamurali will respond shortly.");
+        this.reset();
+    });
 </script>
 
 </body>
