@@ -33,17 +33,38 @@
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
         }
+        /* ================= GLOBAL BACKGROUND VIDEO ================= */
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35;              /* background softness */
+    z-index: -3;
+    pointer-events: none;
+}
+
+/* DARK OVERLAY ABOVE VIDEO */
+.bg-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: -2;
+}
+
+/* LET VIDEO SHOW THROUGH SECTIONS */
+section {
+    background: transparent;
+}
+
 
         /* Carbon Fiber Pattern Background */
         section {
             padding: 100px 10%;
-            background-image: 
-                linear-gradient(45deg, #111 25%, transparent 25%), 
-                linear-gradient(-45deg, #111 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #111 75%), 
-                linear-gradient(-45deg, transparent 75%, #111 75%);
-            background-size: 8px 8px;
-            border-bottom: 1px solid #222;
+            
+                
         }
 
         /* Header & Navigation */
@@ -208,7 +229,7 @@
         }
 
         /* Skill Gauges */
-        .skills-section { background: var(--bmw-dark-grey); }
+        
         .skill-bar { margin-bottom: 25px; }
         .skill-info { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; }
         .bar-outer { height: 12px; background: #000; border-radius: 2px; position: relative; }
@@ -256,9 +277,107 @@
             .navlist { display: none; }
             .home-content h1 { font-size: 40px; }
         }
+        @media (max-width: 768px) {
+    .bg-video {
+        display: none;   /* disable video on mobile */
+    }
+
+    body {
+        background:
+            linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
+            url("image/mobile-bg.jpg") center / cover no-repeat fixed;
+    }
+}
+    /* ================= CONTACT LINKS ================= */
+.contact-links {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    flex-wrap: wrap;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--bmw-silver);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    transition: all 0.35s ease;
+    position: relative;
+}
+
+/* ICON SIZE */
+.contact-item i {
+    font-size: 28px;
+    transition: transform 0.35s ease;
+}
+
+/* HOVER EFFECT (COMMON) */
+.contact-item:hover {
+    transform: translateY(-6px);
+    text-shadow: var(--neon-shadow);
+}
+
+/* ICON ANIMATION */
+.contact-item:hover i {
+    transform: scale(1.2);
+}
+
+/* BRAND COLORS */
+.contact-item.linkedin:hover {
+    color: #0A66C2;
+}
+
+.contact-item.github:hover {
+    color: #ffffff;
+}
+
+.contact-item.email:hover {
+    color: #EA4335;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .contact-links {
+        gap: 25px;
+    }
+    .contact-item {
+        font-size: 15px;
+    }
+}
+/* Contact Inputs */
+#contact input,
+#contact textarea {
+    transition: 
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
+}
+
+#contact input:focus,
+#contact textarea:focus {
+    border-color: var(--m-light-blue);
+    box-shadow: 0 0 18px rgba(0,174,239,0.45);
+    transform: translateY(-2px);
+}
+
     </style>
 </head>
 <body>
+    <!-- BACKGROUND VIDEO -->
+<video class="bg-video" autoplay muted loop playsinline>
+    <source src="video/bmw-drift.mp4" type="video/mp4">
+</video>
+
+
+<!-- DARK OVERLAY -->
+<div class="bg-overlay"></div>
+
 
 <header>
     <div class="logo">BMK<span>.M-SPORT</span></div>
@@ -269,7 +388,7 @@
         <li><a href="#projects">Garage</a></li>
         <li><a href="#contact">Contact</a></li>
     </ul>
-    <div id="menu-icon" class="bx bx-menu"></div>
+    
 </header>
 
 <section id="home" class="home">
@@ -291,7 +410,7 @@
         </p>
         <div class="btn-box">
             <a href="#contact" class="btn">Launch Engine (Contact)</a>
-            <a href="https://www.linkedin.com/in/balamurali-krishna-m" target="_blank" class="btn" style="background: #333;">LinkedIn</a>
+            
         </div>
     </div>
 </section>
@@ -398,10 +517,24 @@
         <textarea rows="5" placeholder="Transmission Details (Message)"></textarea>
         <button type="submit" class="btn">Send Signal</button>
     </form>
-    <div style="text-align: center; margin-top: 30px;">
-        <p><i class='bx bxs-phone'></i> +91 7829789734</p>
-        <p><i class='bx bxs-envelope'></i> balamuralikrishna2004@gmail.com</p>
-    </div>
+    <div class="contact-links">
+
+    <a href="https://www.linkedin.com/in/balamurali-krishna-m-377579267/" target="_blank" class="contact-item linkedin">
+        <i class='bx bxl-linkedin-square'></i>
+        <span>LinkedIn</span>
+    </a>
+
+    <a href="https://github.com/Balamuralikrishna2004" target="_blank" class="contact-item github">
+        <i class='bx bxl-github'></i>
+        <span>GitHub</span>
+    </a>
+
+    <a href="mailto:balamuralikrishna2004@gmail.com" class="contact-item email">
+        <i class='bx bxs-envelope'></i>
+        <span>Email</span>
+    </a>
+
+</div>
 </section>
 
 <footer>
