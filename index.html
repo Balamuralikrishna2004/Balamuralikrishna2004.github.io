@@ -273,7 +273,7 @@ section {
         .scroll-reveal { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
         .scroll-reveal.show { opacity: 1; transform: translateY(0); }
 
-        @media (max-width: 768px) {
+        @media (max-width: 500px) {
             .navlist { display: none; }
             .home-content h1 { font-size: 40px; }
         }
@@ -490,6 +490,7 @@ section {
     <div class="main-text">
         <h2>Modifications (Certifications)</h2>
     </div>
+    
     <div class="grid-container">
         <div class="card">
             <h3>IBM Cybersecurity Analyst</h3>
@@ -511,12 +512,17 @@ section {
     <div class="main-text">
         <h2>Contact the Driver</h2>
     </div>
-    <form id="contact-form">
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea rows="5" placeholder="Transmission Details (Message)"></textarea>
-        <button type="submit" class="btn">Send Signal</button>
-    </form>
+   <form action="https://formspree.io/f/mwvbzyvg" method="POST">
+    <input type="text" name="name" placeholder="Your Name" required>
+
+    <input type="email" name="email" placeholder="Your Email" required>
+
+    <textarea name="message" rows="5"
+      placeholder="Transmission Details (Message)"></textarea>
+
+    <button type="submit" class="btn">Send Signal</button>
+</form>
+
     <div class="contact-links">
 
     <a href="https://www.linkedin.com/in/balamurali-krishna-m-377579267/" target="_blank" class="contact-item linkedin">
@@ -620,12 +626,6 @@ section {
 
     document.querySelectorAll(".scroll-reveal").forEach(el => observer.observe(el));
 
-    // --- Form Alert ---
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert("Signal sent successfully. Balamurali will respond shortly.");
-        this.reset();
-    });
 </script>
 
 </body>
